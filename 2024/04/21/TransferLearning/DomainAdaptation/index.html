@@ -1,0 +1,201 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>领域自适应学习 | Lucien</title><meta name="author" content="Shenao Lu,shenaolu0603@163.com"><meta name="copyright" content="Shenao Lu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="将不同领域（如两个不同的数据集）的数据特征映射到同一个特征空间，这样可利用其它领域数据来增强目标领域训练。 域适应的引入 在经典的机器学习模型中，我们习惯性假设训练数据集和目标训练集有着相同的概率分布。而在现实生活中，这种约束性假设很难实现。当训练数据集和测试集有着巨大差异时，很容易出现过拟合的现象，使得训练的模型在测试集上表现不理想。 假设训练数据集是各种英短蓝猫，而想训练得到可以区分田园猫的模">
+<meta property="og:type" content="article">
+<meta property="og:title" content="领域自适应学习">
+<meta property="og:url" content="https://lucienlsa.github.io/2024/04/21/TransferLearning/DomainAdaptation/index.html">
+<meta property="og:site_name" content="Lucien">
+<meta property="og:description" content="将不同领域（如两个不同的数据集）的数据特征映射到同一个特征空间，这样可利用其它领域数据来增强目标领域训练。 域适应的引入 在经典的机器学习模型中，我们习惯性假设训练数据集和目标训练集有着相同的概率分布。而在现实生活中，这种约束性假设很难实现。当训练数据集和测试集有着巨大差异时，很容易出现过拟合的现象，使得训练的模型在测试集上表现不理想。 假设训练数据集是各种英短蓝猫，而想训练得到可以区分田园猫的模">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/04/05/Bd6znO2I8ZLceFD.jpg">
+<meta property="article:published_time" content="2024-04-21T07:57:03.232Z">
+<meta property="article:modified_time" content="2024-04-21T08:30:49.761Z">
+<meta property="article:author" content="Shenao Lu">
+<meta property="article:tag" content="algorithm">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/04/05/Bd6znO2I8ZLceFD.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2024/04/03/hJcDCjPRvtpqdWs.png"><link rel="canonical" href="https://lucienlsa.github.io/2024/04/21/TransferLearning/DomainAdaptation/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '领域自适应学习',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-04-21 16:30:49'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2024/04/04/oghnOyU3GQpPtKL.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">25</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2024/04/05/Bd6znO2I8ZLceFD.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Lucien"><span class="site-name">Lucien</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">领域自适应学习</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-04-21T07:57:03.232Z" title="发表于 2024-04-21 15:57:03">2024-04-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-21T08:30:49.761Z" title="更新于 2024-04-21 16:30:49">2024-04-21</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/">迁移学习</a></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>将不同领域（如两个不同的数据集）的数据特征映射到同一个特征空间，这样可利用其它领域数据来增强目标领域训练。</p>
+<h2 id="域适应的引入">域适应的引入</h2>
+<p>在经典的机器学习模型中，我们习惯性假设训练数据集和目标训练集有着相同的概率分布。而在现实生活中，这种约束性假设很难实现。当训练数据集和测试集有着巨大差异时，很容易出现过拟合的现象，使得训练的模型在测试集上表现不理想。</p>
+<p>假设训练数据集是各种英短蓝猫，而想训练得到可以区分田园猫的模型，该模型相比于英短蓝猫识别情况性能会下降。当训练数据集和测试数据集分布不一致的情况下，通过在训练数据集上按经验误差最小准则训练得到的模型在测试数据集上性能不佳，因此，我们引入了域适应技术。</p>
+<p>我们有时在一个感兴趣的领域中有一个分类任务，但是在另一个感兴趣的领域中我们只有足够的训练数据，在另一个领域中，后者可能位于不同的特征空间或遵循不同的数据分布。在这种情况下，如果成功地进行知识迁移，就可以避免昂贵的数据标记工作，从而大大提高学习性能。</p>
+<h2 id="域适应方法分类">域适应方法分类</h2>
+<p>域适应中有两个基础概念：源域(Source Domain)和目标域（Target Domain）。源域中有着丰富的监督学习信息；目标域表示测试集所在的领域，通常无标签或者只含有少量的标签。源域和目标域往往是同一类任务，但是分布不同。</p>
+<p>几种不同的域适应方法：</p>
+<ol>
+<li>
+<p>样本自适应：将源域中样本重采样，使其分布趋近于目标域分布；从源域中找出那些长的最像目标域的样本，让他们带着高权重加入目标域的数据学习。</p>
+</li>
+<li>
+<p>特征层面自适应：与一般的将源域映射到目标域方法不同，该类方法将源域和目标域投影到公共特征子空间，进而使得源域上的训练知识可以直接应用于目标域；</p>
+</li>
+<li>
+<p>模型层面自适应：对源域误差函数进行修改，考虑到目标与的误差。</p>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://LucienLSA.github.io">Shenao Lu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lucienlsa.github.io/2024/04/21/TransferLearning/DomainAdaptation/">https://lucienlsa.github.io/2024/04/21/TransferLearning/DomainAdaptation/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://LucienLSA.github.io" target="_blank">Lucien</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/algorithm/">algorithm</a><a class="post-meta__tags" href="/tags/python/">python</a></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2024/04/05/Bd6znO2I8ZLceFD.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/04/21/Conda/Command/" title="【anaconda】conda创建、查看、删除虚拟环境"><img class="cover" src="https://s2.loli.net/2024/04/05/gPSBpWH4vMnhU6k.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">【anaconda】conda创建、查看、删除虚拟环境</div></div></a></div><div class="next-post pull-right"><a href="/2024/04/18/ADP/QlearningLQT/" title="Reinforcement Q -learning for optimal tracking control of linear discrete-time systems with unknown dynamics"><img class="cover" src="https://s2.loli.net/2024/04/05/JC6P4ycwDeEKRfl.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Reinforcement Q -learning for optimal tracking control of linear discrete-time systems with unknown dynamics</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/04/14/Pytorch/Notes/" title="Pytorch入门学习"><img class="cover" src="https://s2.loli.net/2024/04/05/Ivzr23MiNpQftUF.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-14</div><div class="title">Pytorch入门学习</div></div></a></div><div><a href="/2024/04/08/ADP/CT_UnknownSys/" title="Computational adaptive optimal control for continuous-time linear systems with completely unknown dynamics"><img class="cover" src="https://s2.loli.net/2024/04/05/JC6P4ycwDeEKRfl.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-08</div><div class="title">Computational adaptive optimal control for continuous-time linear systems with completely unknown dynamics</div></div></a></div><div><a href="/2024/04/14/ADP/ET_Output_Feedback/" title="Event-Triggered Adaptive Optimal Control With Output Feedback An Adaptive Dynamic Programming Approach"><img class="cover" src="https://s2.loli.net/2024/04/05/gPSBpWH4vMnhU6k.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-14</div><div class="title">Event-Triggered Adaptive Optimal Control With Output Feedback An Adaptive Dynamic Programming Approach</div></div></a></div><div><a href="/2024/04/09/ADP/ET_DT/" title="Event-Triggered Adaptive Critic Control Design for Discrete-Time Constrained Nonlinear Systems"><img class="cover" src="https://s2.loli.net/2024/04/05/jIvfgaOuiDtSnz9.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-09</div><div class="title">Event-Triggered Adaptive Critic Control Design for Discrete-Time Constrained Nonlinear Systems</div></div></a></div><div><a href="/2024/04/11/ADP/ET_CT/" title="Event-Triggered Adaptive Dynamic Programming for Continuous-Time Systems With Control Constraints"><img class="cover" src="https://s2.loli.net/2024/04/05/p45RjbaNBt2nioF.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-11</div><div class="title">Event-Triggered Adaptive Dynamic Programming for Continuous-Time Systems With Control Constraints</div></div></a></div><div><a href="/2024/04/12/ADP/ET_basic/" title="事件触发控制"><img class="cover" src="https://s2.loli.net/2024/04/05/wLcfd8146Pilrt9.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-12</div><div class="title">事件触发控制</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2024/04/04/oghnOyU3GQpPtKL.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Shenao Lu</div><div class="author-info__description">永远喜欢并相信鲜花，诗歌，黄昏，音乐的永恒性，就算在浓稠的寒冬里，也能随时随地用它们栽种出一个春天。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">25</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">没有你在我有多难熬，没有你烦我有多烦恼。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%9F%E9%80%82%E5%BA%94%E7%9A%84%E5%BC%95%E5%85%A5"><span class="toc-number">1.</span> <span class="toc-text">域适应的引入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%9F%E9%80%82%E5%BA%94%E6%96%B9%E6%B3%95%E5%88%86%E7%B1%BB"><span class="toc-number">2.</span> <span class="toc-text">域适应方法分类</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/04/21/Conda/Command/" title="【anaconda】conda创建、查看、删除虚拟环境">【anaconda】conda创建、查看、删除虚拟环境</a><time datetime="2024-04-21T08:27:32.625Z" title="发表于 2024-04-21 16:27:32">2024-04-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/04/21/TransferLearning/DomainAdaptation/" title="领域自适应学习">领域自适应学习</a><time datetime="2024-04-21T07:57:03.232Z" title="发表于 2024-04-21 15:57:03">2024-04-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/04/18/ADP/QlearningLQT/" title="Reinforcement Q -learning for optimal tracking control of linear discrete-time systems with unknown dynamics">Reinforcement Q -learning for optimal tracking control of linear discrete-time systems with unknown dynamics</a><time datetime="2024-04-18T06:52:20.681Z" title="发表于 2024-04-18 14:52:20">2024-04-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/04/17/ADP/ET_TC_PUnknownConstrainedUncertain/" title="Event-Triggered ADP for Tracking Control of Partially Unknown Constrained Uncertain Systems">Event-Triggered ADP for Tracking Control of Partially Unknown Constrained Uncertain Systems</a><time datetime="2024-04-17T09:33:34.661Z" title="发表于 2024-04-17 17:33:34">2024-04-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/04/14/ADP/ET_Output_Feedback/" title="Event-Triggered Adaptive Optimal Control With Output Feedback An Adaptive Dynamic Programming Approach">Event-Triggered Adaptive Optimal Control With Output Feedback An Adaptive Dynamic Programming Approach</a><time datetime="2024-04-14T13:13:18.881Z" title="发表于 2024-04-14 21:13:18">2024-04-14</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Shenao Lu</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-heart.min.js" async="async" mobile="false"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/metingjs/dist/Meting.min.js"></script></div></body></html>
