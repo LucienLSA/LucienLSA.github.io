@@ -1,0 +1,254 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Model-Free Q-Learning for the Tracking Problem of Linear Discrete-Time Systems | Lucien</title><meta name="author" content="Shenao Lu,shenaolu0603@163.com"><meta name="copyright" content="Shenao Lu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Model-Free Q-Learning for the Tracking Problem of Linear Discrete-Time Systems，2024， Chun Li , Jinliang Ding , Senior Member, IEEE, Frank L. Lewis , Life Fellow, IEEE, and Tianyou Chai , Life Fellow,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Model-Free Q-Learning for the Tracking Problem of Linear Discrete-Time Systems">
+<meta property="og:url" content="https://lucienlsa.github.io/2024/04/25/ADP/Model_Free_Track/index.html">
+<meta property="og:site_name" content="Lucien">
+<meta property="og:description" content="Model-Free Q-Learning for the Tracking Problem of Linear Discrete-Time Systems，2024， Chun Li , Jinliang Ding , Senior Member, IEEE, Frank L. Lewis , Life Fellow, IEEE, and Tianyou Chai , Life Fellow,">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/04/05/Ivzr23MiNpQftUF.jpg">
+<meta property="article:published_time" content="2024-04-25T01:35:04.182Z">
+<meta property="article:modified_time" content="2024-04-25T01:39:47.432Z">
+<meta property="article:author" content="Shenao Lu">
+<meta property="article:tag" content="论文笔记">
+<meta property="article:tag" content="仿真">
+<meta property="article:tag" content="algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/04/05/Ivzr23MiNpQftUF.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2024/04/03/hJcDCjPRvtpqdWs.png"><link rel="canonical" href="https://lucienlsa.github.io/2024/04/25/ADP/Model_Free_Track/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Model-Free Q-Learning for the Tracking Problem of Linear Discrete-Time Systems',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-04-25 09:39:47'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2024/04/04/oghnOyU3GQpPtKL.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">35</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">27</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2024/04/05/Ivzr23MiNpQftUF.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Lucien"><span class="site-name">Lucien</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Model-Free Q-Learning for the Tracking Problem of Linear Discrete-Time Systems</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-04-25T01:35:04.182Z" title="发表于 2024-04-25 09:35:04">2024-04-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-25T01:39:47.432Z" title="更新于 2024-04-25 09:39:47">2024-04-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ADP/">ADP</a></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>Model-Free Q-Learning for the Tracking Problem of Linear Discrete-Time Systems，2024， Chun Li , Jinliang Ding , Senior Member, IEEE, Frank L. Lewis , Life Fellow, IEEE, and Tianyou Chai , Life Fellow, IEEE</h1>
+<p>对完全未知动力学的线性离散时间系统，提出model-free Qlearning 算法，解决最优跟踪问题。给出Qlearning性能指标函数，将跟踪问题转化为整定问题。性能指标函数在控制输入的二次型增加一个由增益矩阵和参考跟踪轨迹组成的乘积项。该Qlearning不需要原控制系统和指令生成器的任何动力学知识，在线获取系统状态、控制输入和参考跟踪轨迹等信息，迭代推导控制策略。通过被控系统和参考跟踪轨迹前提下得到的迭代标准，可更新期望的控制输入，保证所得到的控制策略可消除跟踪误差。为数据的高效利用，该算法采用off-policy。</p>
+<p>以往文章对CT和DT系统的输出跟踪问题，提出基于内部模型原理的ADP和Qlearning。与其不同，状态跟踪问题则采用设计增广系统。根据B. Kiumarsi and F. L. Lewis, “Actor-critic-based optimal tracking for partially unknown nonlinear discrete-time systems,” IEEE Trans. Neural Netw. Learn. Syst., vol. 26, no. 1, pp. 140–151, Jan. 2015.中其ADP和Qlearning会导致有界跟踪误差，无法消除。</p>
+<p>控制输入变量维数小于系统状态维数，期望控制输入不总是由输入矩阵的逆求得。为避免获得期望控制输入，由原控制系统和指令生成器组成的增广系统，以形成HJB方程和ARE。选择较小折扣因子或增加跟踪误差二次型在性能指标函数中的比例有利于减小跟踪误差。</p>
+<p>当系统动力学未知时，数据驱动方法非常适合。Y. Jiang, J. Fan, W. Gao, T. Chai, and F. L. Lewis, “Cooperative adaptive optimal output regulation of nonlinear discretetime multi-agent systems,” Automatica, vol. 121, Nov. 2020, Art. no. 109149.，每个智能体基于实时数据建模，其为基于数据驱动的模型。</p>
+<p>而Qlearning利用在线数据迭代更新Qfunction和policy function。B. Kiumarsi, F. L. Lewis, H. Modaresa, A. Karimpoura, and M.-B. Naghibi-Sistani, “Reinforcement Q-learning for optimal tracking control of linear discrete-time systems with unknown dynamics,” Automatica, vol. 50, no. 4, pp. 1167–1175, 2014.对线性离散时间系统的OTC问题提出基于增广系统的数据驱动的Qlearning方法。</p>
+<p>线性离散时间系统</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/6042c854bf0e4879b065c7bd89c68bed.png" alt="在这里插入图片描述"></p>
+<p>指令生成器的动力学</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/11ccfd238932403bb8c2da20eed752ea.png" alt="在这里插入图片描述"></p>
+<p>跟踪控制问题转化为整定问题</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/e9eb4d9a0e8246a39d4cdda9b3b238d7.png" alt="在这里插入图片描述"></p>
+<p>值函数定义为</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/982baf656fb84b33bd04b01f022165d2.png" alt="在这里插入图片描述"></p>
+<p>给出最优值函数和贝尔曼方程，构造哈密顿函数</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/34ec70a860744dd1ba70051402dbebf7.png" alt="在这里插入图片描述"></p>
+<p>最优控制的平稳性条件，得到最优控制输入</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/bb4d3411d1e2477ca003837f2c9c7470.png" alt="在这里插入图片描述"></p>
+<p>其形式为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mi>k</mi></msub><mo>=</mo><mo>−</mo><mi>K</mi><msub><mi>x</mi><mi>k</mi></msub><mo>+</mo><mi>L</mi><msub><mi>v</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">u_k=-Kx_k+Lv_k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord">−</span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord mathnormal">L</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>=</mo><mo stretchy="false">(</mo><mi>R</mi><mo>+</mo><msup><mi>B</mi><mi mathvariant="normal">⊤</mi></msup><mi>P</mi><mi>B</mi><msup><mo stretchy="false">)</mo><mrow><mo>−</mo><mn>1</mn></mrow></msup><msup><mi>B</mi><mi mathvariant="normal">⊤</mi></msup><mi>P</mi><mi>A</mi></mrow><annotation encoding="application/x-tex">K=(R+B^\top PB)^{-1}B^\top PA</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0991em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">⊤</span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.05017em;">PB</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">⊤</span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord mathnormal">A</span></span></span></span>，</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">L</mi><mo>=</mo><mi mathvariant="bold-italic">U</mi><mo>+</mo><mi mathvariant="bold-italic">K</mi><mi mathvariant="bold-italic">F</mi></mrow><annotation encoding="application/x-tex">\boldsymbol{L}=\boldsymbol{U}+\boldsymbol{K}\boldsymbol{F}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">L</span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7694em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.11424em;">U</span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.06979em;">K</span></span></span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.15972em;">F</span></span></span></span></span></span></p>
+<p>定义Qfunction(Qlearning的性能指标函数)，值函数改写为</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/9a4c357f0871418d88ef8fc74b652e79.png" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/direct/aebf1dba682c4a168a3445adead444ef.png" alt="在这里插入图片描述"></p>
+<p>Qlearning方法贝尔曼方程</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/98af9961368543de916124a18a5da4f1.png" alt="在这里插入图片描述"></p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mrow><mo fence="true">(</mo><msub><mi>x</mi><mi>k</mi></msub><mo separator="true">,</mo><msub><mi>u</mi><mi>k</mi></msub><mo separator="true">,</mo><msub><mi>v</mi><mi>k</mi></msub><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\rho\left(x_k,u_k,v_k\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">ρ</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span></span>为效用函数</p>
+<p>最优控制输入表示为</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/2cdfff45764446169676e6e17b0c0b98.png" alt="在这里插入图片描述"></p>
+<p>由Qfunction的核矩阵</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/7771d229fc6d450d99c000ace03fe54d.png" alt="在这里插入图片描述"></p>
+<p>P和K求解通过原系统的整定问题，而不必考虑跟踪问题。</p>
+<p>Lemma1给出增广矩阵[F;U]满足</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/db66834c4efe4b3f8cc0732f20505c90.png" alt="在这里插入图片描述"></p>
+<p>由于F未知，将以下作为增广矩阵[F;U]和H核矩阵的必要条件</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/992e516adc28414e89786840b8f4e154.png" alt="在这里插入图片描述"></p>
+<p>为使用数据驱动方法求解控制矩阵，定义激活函数</p>
+<p>值迭代Qlearning方法，迭代Qfunction标准，</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/c11d297b5ed045e2bf925f7af9b68234.png" alt="在这里插入图片描述"></p>
+<p>使用激活函数可将迭代Qfunction改写为</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/a2c2ed9b11244717a2931e596bd60301.png" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/direct/2122981081744f609a00cef9ee56d2c6.png" alt="在这里插入图片描述"></p>
+<p>根据激活函数矩阵，满秩</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/e38399d8291f4e2e9c592418085d0445.png" alt="在这里插入图片描述"></p>
+<p>计算迭代核矩阵更新</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/849db28e74174027a0574ba8b41039c3.png" alt="在这里插入图片描述"></p>
+<p>增广矩阵更新</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/f5fd859fcd3c4ba68abbb290ca98ee3f.png" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/direct/da79f9bd8e764e77ab578820df2d54b3.png" alt="在这里插入图片描述"></p>
+<p>迭代核矩阵更新</p>
+<p>Algorithm1 基于Vi的model-free Qlearning算法求解跟踪控制问题</p>
+<p>初始化增广矩阵增益和Qfunction核矩阵，H、K、L、F、U。在线数据，计算权重向量，更新核矩阵和增益矩阵。</p>
+<p>为确保矩阵可逆，传统方法需加入PE条件，即探测噪音。PE条件由随机噪声和正弦信号。需要更多样本数据有利于研究被控系统和指令生成器的动力学。</p>
+<p>Lemma2给出在Assumptions1和2下跟踪问题由被控系统和指令生成器描述。矩阵U满足Assumption2的要求</p>
+<p>Theorem1给出在Assumptions1和2，Qfunction定义下，在迭代Algorithm1，迭代矩阵[F,U]满足假设2，由Algorithm1得到的矩阵K和L以消除跟踪误差。</p>
+<p>基于off-policy方法的Model-free Qlearning Algorithm</p>
+<p>控制策略<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mi>k</mi></msub><mo>=</mo><mo>−</mo><mi>K</mi><msub><mi>x</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">u_k=-Kx_k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord">−</span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>最优整定问题，求解整定问题的核矩阵为</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/65359807ccab4f10b36ebd5def2f8a88.png" alt="在这里插入图片描述"></p>
+<p>迭代控制输入和在线控制输入</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/9e7b69e360ca49e09804744e0adb1976.png" alt="在这里插入图片描述"></p>
+<p>迭代系统状态表示为</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/334e5f30ce9c4259b9014a96ccd3ee76.png" alt="在这里插入图片描述"></p>
+<p>因此迭代值函数更新为</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/982e2c0a3823410e9f51e4932c391ceb.png" alt="在这里插入图片描述"></p>
+<p>由于迭代值函数等价于Qfunction</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/6d7be1ee4e2a48a89c016bb943a45ed7.png" alt="在这里插入图片描述"></p>
+<p>在激活函数下</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/f10b1b4b66744d25b49e32b0eff86ffc.png" alt="在这里插入图片描述"></p>
+<p>可更新迭代核矩阵</p>
+<p><img src="https://img-blog.csdnimg.cn/direct/347a6a5032174529a6e625ddab8f812c.png" alt="在这里插入图片描述"></p>
+<p>Algorithm2给出使用off-policy方法的基于VI的model-free Qlearning算法</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://LucienLSA.github.io">Shenao Lu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lucienlsa.github.io/2024/04/25/ADP/Model_Free_Track/">https://lucienlsa.github.io/2024/04/25/ADP/Model_Free_Track/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://LucienLSA.github.io" target="_blank">Lucien</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">论文笔记</a><a class="post-meta__tags" href="/tags/%E4%BB%BF%E7%9C%9F/">仿真</a><a class="post-meta__tags" href="/tags/algorithm/">algorithm</a></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2024/04/05/Ivzr23MiNpQftUF.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/04/25/ADP/parallel_OTC/" title="Parallel Control for Optimal Tracking via Adaptive Dynamic Programming"><img class="cover" src="https://s2.loli.net/2024/04/05/Bd6znO2I8ZLceFD.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Parallel Control for Optimal Tracking via Adaptive Dynamic Programming</div></div></a></div><div class="next-post pull-right"><a href="/2024/04/25/ADP/Safe_Constrain_Disturbances/" title="ADP-Based Optimal Control for Discrete-Time Systems With Safe Constraints and Disturbances"><img class="cover" src="https://s2.loli.net/2024/04/05/JC6P4ycwDeEKRfl.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">ADP-Based Optimal Control for Discrete-Time Systems With Safe Constraints and Disturbances</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/04/11/ADP/ET_CT/" title="Event-Triggered Adaptive Dynamic Programming for Continuous-Time Systems With Control Constraints"><img class="cover" src="https://s2.loli.net/2024/04/05/wLcfd8146Pilrt9.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-11</div><div class="title">Event-Triggered Adaptive Dynamic Programming for Continuous-Time Systems With Control Constraints</div></div></a></div><div><a href="/2024/04/09/ADP/ET_DT/" title="Event-Triggered Adaptive Critic Control Design for Discrete-Time Constrained Nonlinear Systems"><img class="cover" src="https://s2.loli.net/2024/04/05/gPSBpWH4vMnhU6k.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-09</div><div class="title">Event-Triggered Adaptive Critic Control Design for Discrete-Time Constrained Nonlinear Systems</div></div></a></div><div><a href="/2024/04/08/ADP/CT_UnknownSys/" title="Computational adaptive optimal control for continuous-time linear systems with completely unknown dynamics"><img class="cover" src="https://s2.loli.net/2024/04/05/p45RjbaNBt2nioF.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-08</div><div class="title">Computational adaptive optimal control for continuous-time linear systems with completely unknown dynamics</div></div></a></div><div><a href="/2024/04/14/ADP/ET_Output_Feedback/" title="Event-Triggered Adaptive Optimal Control With Output Feedback An Adaptive Dynamic Programming Approach"><img class="cover" src="https://s2.loli.net/2024/04/05/p45RjbaNBt2nioF.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-14</div><div class="title">Event-Triggered Adaptive Optimal Control With Output Feedback An Adaptive Dynamic Programming Approach</div></div></a></div><div><a href="/2024/04/12/ADP/ET_basic/" title="事件触发控制"><img class="cover" src="https://s2.loli.net/2024/04/05/wLcfd8146Pilrt9.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-12</div><div class="title">事件触发控制</div></div></a></div><div><a href="/2024/04/17/ADP/ET_TC_PUnknownConstrainedUncertain/" title="Event-Triggered ADP for Tracking Control of Partially Unknown Constrained Uncertain Systems"><img class="cover" src="https://s2.loli.net/2024/04/05/Ivzr23MiNpQftUF.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-17</div><div class="title">Event-Triggered ADP for Tracking Control of Partially Unknown Constrained Uncertain Systems</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2024/04/04/oghnOyU3GQpPtKL.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Shenao Lu</div><div class="author-info__description">永远喜欢并相信鲜花，诗歌，黄昏，音乐的永恒性，就算在浓稠的寒冬里，也能随时随地用它们栽种出一个春天。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">35</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">27</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">没有你在我有多难熬，没有你烦我有多烦恼。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Model-Free Q-Learning for the Tracking Problem of Linear Discrete-Time Systems，2024， Chun Li , Jinliang Ding , Senior Member, IEEE, Frank L. Lewis , Life Fellow, IEEE, and Tianyou Chai , Life Fellow, IEEE</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/06/Computer/WinIssues/" title="win系统使用过程遇到问题">win系统使用过程遇到问题</a><time datetime="2024-05-06T06:37:02.456Z" title="发表于 2024-05-06 14:37:02">2024-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/02/Pytorch/PythonNotes/" title="Python使用记录">Python使用记录</a><time datetime="2024-05-02T07:54:49.174Z" title="发表于 2024-05-02 15:54:49">2024-05-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/04/29/ADP/Model_free_et_GrHDP/" title="Model-free event-triggered optimal control with performance guarantees via goal representation heuristic dynamic programming">Model-free event-triggered optimal control with performance guarantees via goal representation heuristic dynamic programming</a><time datetime="2024-04-29T06:53:07.645Z" title="发表于 2024-04-29 14:53:07">2024-04-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/04/29/RL/Notes/" title="强化学习快速入门学习">强化学习快速入门学习</a><time datetime="2024-04-29T01:52:33.389Z" title="发表于 2024-04-29 09:52:33">2024-04-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/04/28/Pytorch/handwritting/" title="Pytorch入门学习手写数字识别">Pytorch入门学习手写数字识别</a><time datetime="2024-04-28T02:57:24.383Z" title="发表于 2024-04-28 10:57:24">2024-04-28</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Shenao Lu</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-heart.min.js" async="async" mobile="false"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/metingjs/dist/Meting.min.js"></script></div></body></html>
