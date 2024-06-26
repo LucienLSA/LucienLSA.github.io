@@ -1,0 +1,208 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Kubernetes学习 | Lucien</title><meta name="author" content="Shenao Lu,shenaolu0603@163.com"><meta name="copyright" content="Shenao Lu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="k8s基本介绍 本质上为应用服务和服务器之间的中间层，通过暴露一系列的API能力，简化服务的部署运维流程 介于应用服务和服务器之间，通过策略协调和管理多个应用服务，只需要一个yaml文件配置，定义应用的部署顺序等信息，自动部署应用到各个服务器上，自动扩缩容。 控制平面control plane 负责控制和管理各个node 内部组件 以前需要登录到每台服务器，手动执行各种命令，调用K8S提供的API">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kubernetes学习">
+<meta property="og:url" content="https://lucienlsa.github.io/2024/06/24/Network/Kubernetes(k8s)/index.html">
+<meta property="og:site_name" content="Lucien">
+<meta property="og:description" content="k8s基本介绍 本质上为应用服务和服务器之间的中间层，通过暴露一系列的API能力，简化服务的部署运维流程 介于应用服务和服务器之间，通过策略协调和管理多个应用服务，只需要一个yaml文件配置，定义应用的部署顺序等信息，自动部署应用到各个服务器上，自动扩缩容。 控制平面control plane 负责控制和管理各个node 内部组件 以前需要登录到每台服务器，手动执行各种命令，调用K8S提供的API">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/04/05/jIvfgaOuiDtSnz9.jpg">
+<meta property="article:published_time" content="2024-06-24T15:29:37.497Z">
+<meta property="article:modified_time" content="2024-06-25T02:35:44.340Z">
+<meta property="article:author" content="Shenao Lu">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/04/05/jIvfgaOuiDtSnz9.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2024/04/03/hJcDCjPRvtpqdWs.png"><link rel="canonical" href="https://lucienlsa.github.io/2024/06/24/Network/Kubernetes(k8s)/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Kubernetes学习',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-06-25 10:35:44'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2024/04/04/oghnOyU3GQpPtKL.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">50</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">40</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">20</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2024/04/05/jIvfgaOuiDtSnz9.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Lucien"><span class="site-name">Lucien</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Kubernetes学习</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-06-24T15:29:37.497Z" title="发表于 2024-06-24 23:29:37">2024-06-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-06-25T02:35:44.340Z" title="更新于 2024-06-25 10:35:44">2024-06-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/linux/">linux</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/linux/%E7%BD%91%E7%BB%9C/">网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Kubernetes学习"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="k8s基本介绍">k8s基本介绍</h2>
+<p>本质上为应用服务和服务器之间的中间层，通过暴露一系列的API能力，简化服务的部署运维流程</p>
+<p>介于应用服务和服务器之间，通过策略协调和管理多个应用服务，只需要一个yaml文件配置，定义应用的部署顺序等信息，自动部署应用到各个服务器上，自动扩缩容。</p>
+<h3 id="控制平面control-plane">控制平面control plane</h3>
+<p>负责控制和管理各个node</p>
+<h4 id="内部组件">内部组件</h4>
+<p>以前需要登录到每台服务器，手动执行各种命令，调用K8S提供的API接口，即可操作这些服务资源，这些接口是由api-server组件提供</p>
+<p>以前需要看哪台服务器的cpu和内存资源充足后才能部署应用，由schedule调度器来完成；<br>
+找到服务器后，以前会手动创建关闭服务，由control manager控制管理器负责Node的创建和关闭服务，将以上的数据保存到存储层，需要一个etcd</p>
+<h3 id="工作节点Node">工作节点Node</h3>
+<p>Node是实际工作节点，它既可以是裸机服务器，也可以是虚拟机，负责实际运行各个应用服务，多个应用服务共享一台Node上的内存和cpu等计算资源</p>
+<h4 id="内部组件-2">内部组件</h4>
+<p>以前需要上传代码到服务器，只需要将服务代码打包container image容器镜像，则可一行命令将其部署。为了下载和部署镜像，Node中有一个container runtime为容器运行时的组件。</p>
+<p>每个应用服务可认为是container，为应用服务搭配一个日志收集器container或监控采集器container，多个container共同组成一个一个pod，在node上运行。k8s可以将pod从某个node调度到另一个node，还能以pod为单位做重启和动态扩缩容的操作。因此pod是k8s中最小的调度单位</p>
+<p>组件kubelet主要负责管理和监控pod，接收来自控制平面的control manager的创建和关闭node服务</p>
+<p>kube proxy负责node的网络通信，外部请求能被转发到pod中</p>
+<h3 id="cluster集群（控制平面-Node）">cluster集群（控制平面+Node）</h3>
+<p>一般会有多个集群，测试环境用一个集群，生产环境用一个集群，为了将集群内部的服务暴露给外部用户使用。部署一个入口控制器ingress控制器，让外部用户访问集群内部服务</p>
+<h3 id="kubectl">kubectl</h3>
+<p>执行命令，内部可调用k8s和API</p>
+<h3 id="部署服务">部署服务</h3>
+<h4 id="编写yaml文件">编写yaml文件</h4>
+<p>定义pod用到哪些镜像，占用多少内存和cpu等信息。使用kubectl命令行执行kubectl apply -f xx.yaml。kubectl将读取和解析的yaml文件，将解析后的对象通过API请求发送给k8s的控制平面的API server。API server会根据要求驱使scheduler通过etcd提供的数据寻找合适的node，再让controller manager控制node创建服务，node内部的kubelet在收到命令后会基于container runtime组件去拉取镜像，创建容器，最终完成pod创建。</p>
+<p>只需写一遍yaml文件和执行一次kubectl命令</p>
+<h3 id="调用服务">调用服务</h3>
+<p>以前直接在浏览器发送http请求达到服务器上的nginx，再转发到部署的服务内。</p>
+<p>k8s下，外部请求会先到达k8s集群的ingress控制器，然后请求会被转发到k8s内部某个node的kube proxy上，再找到对应的pod，再转发到容器内部的服务中，处理结果原路返回，即完成一次服务调用。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://LucienLSA.github.io">Shenao Lu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lucienlsa.github.io/2024/06/24/Network/Kubernetes(k8s)/">https://lucienlsa.github.io/2024/06/24/Network/Kubernetes(k8s)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://LucienLSA.github.io" target="_blank">Lucien</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/linux/">linux</a></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2024/04/05/jIvfgaOuiDtSnz9.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/06/24/Network/docker/" title="docker容器和传统虚拟机的区别"><img class="cover" src="https://s2.loli.net/2024/04/05/gPSBpWH4vMnhU6k.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">docker容器和传统虚拟机的区别</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/06/20/Cpp/Socket/" title="并发网络通信-套接字通信(C&#x2F;C++ 多线程)"><img class="cover" src="https://s2.loli.net/2024/04/05/p45RjbaNBt2nioF.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-20</div><div class="title">并发网络通信-套接字通信(C&#x2F;C++ 多线程)</div></div></a></div><div><a href="/2024/06/24/Network/docker/" title="docker容器和传统虚拟机的区别"><img class="cover" src="https://s2.loli.net/2024/04/05/gPSBpWH4vMnhU6k.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-24</div><div class="title">docker容器和传统虚拟机的区别</div></div></a></div><div><a href="/2024/05/23/MySQL/MySQLnotes/" title="mysql数据库学习"><img class="cover" src="https://s2.loli.net/2024/04/05/wLcfd8146Pilrt9.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-23</div><div class="title">mysql数据库学习</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2024/04/04/oghnOyU3GQpPtKL.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Shenao Lu</div><div class="author-info__description">永远喜欢并相信鲜花，诗歌，黄昏，音乐的永恒性，就算在浓稠的寒冬里，也能随时随地用它们栽种出一个春天。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">50</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">40</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">20</div></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">没有你在我有多难熬，没有你烦我有多烦恼。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#k8s%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">k8s基本介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E5%B9%B3%E9%9D%A2control-plane"><span class="toc-number">1.1.</span> <span class="toc-text">控制平面control plane</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E9%83%A8%E7%BB%84%E4%BB%B6"><span class="toc-number">1.1.1.</span> <span class="toc-text">内部组件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E8%8A%82%E7%82%B9Node"><span class="toc-number">1.2.</span> <span class="toc-text">工作节点Node</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E9%83%A8%E7%BB%84%E4%BB%B6-2"><span class="toc-number">1.2.1.</span> <span class="toc-text">内部组件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cluster%E9%9B%86%E7%BE%A4%EF%BC%88%E6%8E%A7%E5%88%B6%E5%B9%B3%E9%9D%A2-Node%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">cluster集群（控制平面+Node）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#kubectl"><span class="toc-number">1.4.</span> <span class="toc-text">kubectl</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.5.</span> <span class="toc-text">部署服务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E5%86%99yaml%E6%96%87%E4%BB%B6"><span class="toc-number">1.5.1.</span> <span class="toc-text">编写yaml文件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.6.</span> <span class="toc-text">调用服务</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/24/Network/Kubernetes(k8s)/" title="Kubernetes学习">Kubernetes学习</a><time datetime="2024-06-24T15:29:37.497Z" title="发表于 2024-06-24 23:29:37">2024-06-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/24/Network/docker/" title="docker容器和传统虚拟机的区别">docker容器和传统虚拟机的区别</a><time datetime="2024-06-24T11:16:43.532Z" title="发表于 2024-06-24 19:16:43">2024-06-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/20/Cpp/Socket/" title="并发网络通信-套接字通信(C/C++ 多线程)">并发网络通信-套接字通信(C/C++ 多线程)</a><time datetime="2024-06-20T08:45:12.838Z" title="发表于 2024-06-20 16:45:12">2024-06-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/10/Linux/centos/%E8%BF%90%E7%BB%B4%E5%9F%BA%E7%A1%80/" title="CentOS7学习运维">CentOS7学习运维</a><time datetime="2024-06-10T07:42:20.882Z" title="发表于 2024-06-10 15:42:20">2024-06-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/01/DataStructure/CppAlgorithm/" title="基于Cpp的数据结构和算法学习">基于Cpp的数据结构和算法学习</a><time datetime="2024-05-31T16:57:00.285Z" title="发表于 2024-06-01 00:57:00">2024-06-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Shenao Lu</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-heart.min.js" async="async" mobile="false"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
