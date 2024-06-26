@@ -1,0 +1,294 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>基于VSCode和CMake的C/C++开发 | Lucien</title><meta name="author" content="Shenao Lu,shenaolu0603@163.com"><meta name="copyright" content="Shenao Lu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="资料来源 https:&#x2F;&#x2F;xbing.notion.site&#x2F;VSCode-CMake-C-C-Linux-c330a94669a84c2480a59ba708fd4ece linux系统的常用指令和选项 见文档指令 开发环境搭建 安装编译器和调试器，安装CMake 安装之前先执行，将安装升级进行更新 1sudo apt update GCC编译器 VSCode通过调用GCC编译器实现C&#x2F;C++的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于VSCode和CMake的C&#x2F;C++开发">
+<meta property="og:url" content="https://lucienlsa.github.io/2024/05/22/Linux/CMakeVSC/index.html">
+<meta property="og:site_name" content="Lucien">
+<meta property="og:description" content="资料来源 https:&#x2F;&#x2F;xbing.notion.site&#x2F;VSCode-CMake-C-C-Linux-c330a94669a84c2480a59ba708fd4ece linux系统的常用指令和选项 见文档指令 开发环境搭建 安装编译器和调试器，安装CMake 安装之前先执行，将安装升级进行更新 1sudo apt update GCC编译器 VSCode通过调用GCC编译器实现C&#x2F;C++的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/04/05/wLcfd8146Pilrt9.jpg">
+<meta property="article:published_time" content="2024-05-22T07:19:32.777Z">
+<meta property="article:modified_time" content="2024-06-26T01:58:36.924Z">
+<meta property="article:author" content="Shenao Lu">
+<meta property="article:tag" content="Cpp">
+<meta property="article:tag" content="CMake">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/04/05/wLcfd8146Pilrt9.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2024/04/03/hJcDCjPRvtpqdWs.png"><link rel="canonical" href="https://lucienlsa.github.io/2024/05/22/Linux/CMakeVSC/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '基于VSCode和CMake的C/C++开发',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-06-26 09:58:36'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2024/04/04/oghnOyU3GQpPtKL.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">20</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2024/04/05/wLcfd8146Pilrt9.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Lucien"><span class="site-name">Lucien</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">基于VSCode和CMake的C/C++开发</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-05-22T07:19:32.777Z" title="发表于 2024-05-22 15:19:32">2024-05-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-06-26T01:58:36.924Z" title="更新于 2024-06-26 09:58:36">2024-06-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="基于VSCode和CMake的C/C++开发"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="资料来源">资料来源</h2>
+<p><a target="_blank" rel="noopener" href="https://xbing.notion.site/VSCode-CMake-C-C-Linux-c330a94669a84c2480a59ba708fd4ece">https://xbing.notion.site/VSCode-CMake-C-C-Linux-c330a94669a84c2480a59ba708fd4ece</a></p>
+<h2 id="linux系统的常用指令和选项">linux系统的常用指令和选项</h2>
+<p>见文档指令</p>
+<h2 id="开发环境搭建">开发环境搭建</h2>
+<p>安装编译器和调试器，安装CMake</p>
+<p>安装之前先执行，将安装升级进行更新</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br></pre></td></tr></table></figure>
+<h2 id="GCC编译器">GCC编译器</h2>
+<p>VSCode通过调用GCC编译器实现C/C++的编译<br>
+gcc指令编译C，g++指令编译C++</p>
+<h3 id="设置编译标准">设置编译标准</h3>
+<p>使用c++11标准编译test.cpp</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -std=c++11 test.cpp</span><br></pre></td></tr></table></figure>
+<h2 id="GDB调试器">GDB调试器</h2>
+<p>以下主要为命令行调试</p>
+<p>VSCode通过调用GDB调试器实现C/C++的调试</p>
+<p>主要功能：</p>
+<ul>
+<li>设置断点</li>
+<li>指定代码行暂停</li>
+<li>单步执行程序</li>
+<li>查看变量值的变化</li>
+<li>分析崩溃程序产生的core文件</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g++ sum.cpp -o a_no_g</span><br><span class="line">g++ -g sum.cpp -o a_yes_g</span><br></pre></td></tr></table></figure>
+<p>执行gdb调试</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gdb a_yes_g</span><br><span class="line"></span><br><span class="line"><span class="comment"># Type &quot;apropos word&quot; to search for commands related to &quot;word&quot;...</span></span><br><span class="line"><span class="comment"># Reading symbols from a_yes_g...</span></span><br></pre></td></tr></table></figure>
+<p>之后可执行gdb调试，查看调试的命令，如list continue break run</p>
+<h2 id="VSCode执行Cpp文件">VSCode执行Cpp文件</h2>
+<p>“ctrl `”  打开终端</p>
+<h3 id="多文件编译">多文件编译</h3>
+<p>不同文件级别下cpp文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ main.cpp src/swap.cpp -Iinclude -o main</span><br></pre></td></tr></table></figure>
+<p>文件夹文件信息查询。x表示文件可执行，linux下可执行文件与windows下的不同。windows需要以后缀.exe结尾</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -h</span><br></pre></td></tr></table></figure>
+<p>固定打开选项卡，直接双击，不会将打开的文件覆盖掉。单击时，打开下一个文件则会覆盖掉窗口</p>
+<h2 id="CMake">CMake</h2>
+<p>Cmake是跨平台的安装编译工具，成为大部分开源项目标配</p>
+<p>使用Cmake增加CMakeLists.txt，能对不同平台进行整合编译</p>
+<ol>
+<li>基础语法：指令(参数1 参数2)</li>
+<li>指令是大小写无关，而参数和变量大小写有关</li>
+</ol>
+<p>注意：变量使用${}方式取值，但在IF语句中是直接使用变量名</p>
+<h3 id="重要指令和常用变量">重要指令和常用变量</h3>
+<ol>
+<li>重要指令</li>
+</ol>
+<ul>
+<li>cmake_minimum_required 指定CMake的最小版本要求</li>
+<li>project 定义工程名称，可指定工程支持得语言</li>
+<li>set 显式的定义变量，如定义SRC变量，值为main.cpp hello.cpp</li>
+<li>include_directories 向工程添加多个特定的头文件搜索路径 <em>相当于指定g++编译器的-I参数</em></li>
+<li>link_direcetories 向工程添加多个特定的库文件搜索路径 <em>相当于指定g++编译器的-L参数</em></li>
+<li>add_library 生成库文件，如通过变量SRC生成libhello.so共享库</li>
+<li>add_compile_options 添加编译参数，如添加-wall -std=c++11 -O2</li>
+<li>add_executable 生成可执行文件，如编译main.cpp 生成可执行文件main</li>
+<li>target_link_libraries 为target添加需要链接的共享库 <em>相当于指定g++编译器-l参数</em>，将hello动态库文件链接到可执行文件main</li>
+<li>add_subdirectory 向当前工程添加存放源文件的子目录，并可指定中间二进制和目标二进制存放的位置</li>
+<li>aux_source_directory 发现一个目录下所有的源代码文件并将列表存储在一个变量中，临时被用来自动构建源文件列表</li>
+</ul>
+<ol start="2">
+<li>常用变量</li>
+</ol>
+<ul>
+<li>CMAKE_CXX_FLAGS g++编译选项，如在编译选项后追加-std=c++11</li>
+<li>CMAKE_BUILD_TYPE 编译类型(Debug Release)</li>
+</ul>
+<h3 id="CMake编译工程">CMake编译工程</h3>
+<p>目录结构：主目录存在一个CMakeList.txt 文件</p>
+<h3 id="设置编译规则">设置编译规则</h3>
+<p>1.包含源文件的子文件夹包含CMakeLists.txt文件，主目录的CMakeLists.txt通过add_subdirectory添加子目录即可;<br>
+2.包含源文件的子文件夹未包含CMakeLists.txt文件，子目录编译规则体现在主目录的CMakeLists.txt中;</p>
+<h3 id="编译流程">编译流程</h3>
+<ol>
+<li>手动编写CMakeList.txt</li>
+<li>执行命令cmake PATH 生成Makefile（PATH是顶层CMakeList.txt所在目录）</li>
+<li>执行命令make</li>
+</ol>
+<h3 id="外部构建">外部构建</h3>
+<p>编译输出文件与源文件放在不同目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 当前目录，创建build文件夹</span></span><br><span class="line"><span class="built_in">mkdir</span> build</span><br><span class="line"><span class="comment"># 2. 进入build 文件夹</span></span><br><span class="line"><span class="built_in">cd</span> build </span><br><span class="line"><span class="comment"># 3. 编译上级目录的CMakeList.txt 生成Makefile和其它文件</span></span><br><span class="line">cmake ..</span><br><span class="line"><span class="comment"># 4. 执行make命令，生成target</span></span><br><span class="line">make</span><br></pre></td></tr></table></figure>
+<h2 id="实践案例">实践案例</h2>
+<p>修改完CMakeLists.txt需要保存，再编译</p>
+<h3 id="1-helloworld">1 helloworld</h3>
+<p>CMakeLists.txt文件</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.0</span>) </span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(HELLOWORLD)</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(helloWorld_cmake helloworld.cpp)</span><br></pre></td></tr></table></figure>
+<p>执行可执行文件</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./ helloWorld_cmake</span><br></pre></td></tr></table></figure>
+<h3 id="2-swap">2 swap</h3>
+<p>CMakeLists.txt文件</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(SWAP)</span><br><span class="line"></span><br><span class="line"><span class="keyword">include_directories</span>(<span class="keyword">include</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(main_cmake main.cpp src/swap.cpp)</span><br></pre></td></tr></table></figure>
+<p>执行可执行文件</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./main_cmake</span><br></pre></td></tr></table></figure>
+<h2 id="完整实战C">完整实战C++</h2>
+<h3 id="编写源文件">编写源文件</h3>
+<h3 id="编译CMake项目">编译CMake项目</h3>
+<p>完成外部构建后，进行编译运行。如果还需要修改代码，则修改代码文件后，需要保存文件，再执行make，再可执行文件</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span>(CMAKE_CXX_FLAGS <span class="string">&quot;$&#123;CMAKE_CXX_FLAGS&#125; -Wall&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_BUILD_TYPE Debug)</span><br></pre></td></tr></table></figure>
+<h3 id="配置json并调试项目">配置json并调试项目</h3>
+<ol>
+<li>创建项目Solider的launch.json文件</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.2.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;configurations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line"></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;g++ - 生成和调试活动文件&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cppdbg&quot;</span><span class="punctuation">,</span> </span><br><span class="line">            <span class="attr">&quot;request&quot;</span><span class="punctuation">:</span> <span class="string">&quot;launch&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;program&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;workspaceFolder&#125;/build/my_cmake_exe&quot;</span><span class="punctuation">,</span> <span class="comment">// 调试的可执行文件</span></span><br><span class="line">            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;stopAtEntry&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;cwd&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;workspaceFolder&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;environment&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;externalConsole&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;MIMode&quot;</span><span class="punctuation">:</span> <span class="string">&quot;gdb&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;setupCommands&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                <span class="punctuation">&#123;</span></span><br><span class="line">                    <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;为 gdb 启用整齐打印&quot;</span><span class="punctuation">,</span></span><br><span class="line">                    <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;-enable-pretty-printing&quot;</span><span class="punctuation">,</span></span><br><span class="line">                    <span class="attr">&quot;ignoreFailures&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">                <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="punctuation">&#123;</span></span><br><span class="line">                    <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;将反汇编风格设置为 Intel&quot;</span><span class="punctuation">,</span></span><br><span class="line">                    <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;-gdb-set disassembly-flavor intel&quot;</span><span class="punctuation">,</span></span><br><span class="line">                    <span class="attr">&quot;ignoreFailures&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">                <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;preLaunchTask&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Build&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;miDebuggerPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/usr/bin/gdb&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>创建task.json文件</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span>   </span><br><span class="line">    <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;options&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;cwd&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;workspaceFolder&#125;/build&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;tasks&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;shell&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;label&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cmake&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cmake&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                <span class="string">&quot;..&quot;</span></span><br><span class="line">            <span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;label&quot;</span><span class="punctuation">:</span> <span class="string">&quot;make&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;group&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;kind&quot;</span><span class="punctuation">:</span> <span class="string">&quot;build&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;isDefault&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;make&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line"></span><br><span class="line">            <span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;label&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Build&quot;</span><span class="punctuation">,</span></span><br><span class="line">			<span class="attr">&quot;dependsOrder&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sequence&quot;</span><span class="punctuation">,</span> <span class="comment">// 按列出的顺序执行任务依赖项</span></span><br><span class="line">            <span class="attr">&quot;dependsOn&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">                <span class="string">&quot;cmake&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="string">&quot;make&quot;</span></span><br><span class="line">            <span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>launch.json中的&quot;preLaunchTask&quot;:“Build”  与 task.json中的&quot;label&quot;:“Build”  是一一对应的</p>
+<p>理解：在launch之前完成，执行&quot;cmake&quot;和&quot;make&quot;，即对应的命令</p>
+<p>如果不执行&quot;preLaunchTask&quot;:“Build” ，则调试异常，直接输出运行结果</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://LucienLSA.github.io">Shenao Lu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lucienlsa.github.io/2024/05/22/Linux/CMakeVSC/">https://lucienlsa.github.io/2024/05/22/Linux/CMakeVSC/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://LucienLSA.github.io" target="_blank">Lucien</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Cpp/">Cpp</a><a class="post-meta__tags" href="/tags/CMake/">CMake</a></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2024/04/05/wLcfd8146Pilrt9.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/05/22/Linux/Common/" title="使用linux系统遇到的一些问题"><img class="cover" src="https://s2.loli.net/2024/04/05/Ivzr23MiNpQftUF.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">使用linux系统遇到的一些问题</div></div></a></div><div class="next-post pull-right"><a href="/2024/05/22/Linux/NetworkNotes/" title="linux网络命令和协议核心知识点"><img class="cover" src="https://s2.loli.net/2024/04/05/Bd6znO2I8ZLceFD.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">linux网络命令和协议核心知识点</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/04/03/Cpp/Cpp_issues/" title="学习C++所遇到的问题"><img class="cover" src="https://s2.loli.net/2024/04/05/Ivzr23MiNpQftUF.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-03</div><div class="title">学习C++所遇到的问题</div></div></a></div><div><a href="/2024/04/04/Qt/Qt_learning_Calculator/" title="Qt学习记录-四则运算器"><img class="cover" src="https://s2.loli.net/2024/04/05/JC6P4ycwDeEKRfl.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-04</div><div class="title">Qt学习记录-四则运算器</div></div></a></div><div><a href="/2024/04/05/Qt/Qt_learning_File/" title="Qt学习记录-文件操作"><img class="cover" src="https://s2.loli.net/2024/04/05/gPSBpWH4vMnhU6k.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-05</div><div class="title">Qt学习记录-文件操作</div></div></a></div><div><a href="/2024/04/09/Qt/Qt_learning_MuiltThread/" title="Qt学习记录-TCP的多线程"><img class="cover" src="https://s2.loli.net/2024/04/05/JC6P4ycwDeEKRfl.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-09</div><div class="title">Qt学习记录-TCP的多线程</div></div></a></div><div><a href="/2024/04/05/Qt/Qt_learning_Timer/" title="Qt学习记录-定时器"><img class="cover" src="https://s2.loli.net/2024/04/05/wLcfd8146Pilrt9.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-05</div><div class="title">Qt学习记录-定时器</div></div></a></div><div><a href="/2024/04/07/Qt/Qt_learning_TCP_NewWidget/" title="Qt学习记录-TCP客户端、服务端和新建新窗口"><img class="cover" src="https://s2.loli.net/2024/04/05/Bd6znO2I8ZLceFD.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-07</div><div class="title">Qt学习记录-TCP客户端、服务端和新建新窗口</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2024/04/04/oghnOyU3GQpPtKL.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Shenao Lu</div><div class="author-info__description">永远喜欢并相信鲜花，诗歌，黄昏，音乐的永恒性，就算在浓稠的寒冬里，也能随时随地用它们栽种出一个春天。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">20</div></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">没有你在我有多难熬，没有你烦我有多烦恼。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%84%E6%96%99%E6%9D%A5%E6%BA%90"><span class="toc-number">1.</span> <span class="toc-text">资料来源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%E5%92%8C%E9%80%89%E9%A1%B9"><span class="toc-number">2.</span> <span class="toc-text">linux系统的常用指令和选项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-number">3.</span> <span class="toc-text">开发环境搭建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GCC%E7%BC%96%E8%AF%91%E5%99%A8"><span class="toc-number">4.</span> <span class="toc-text">GCC编译器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E7%BC%96%E8%AF%91%E6%A0%87%E5%87%86"><span class="toc-number">4.1.</span> <span class="toc-text">设置编译标准</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GDB%E8%B0%83%E8%AF%95%E5%99%A8"><span class="toc-number">5.</span> <span class="toc-text">GDB调试器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VSCode%E6%89%A7%E8%A1%8CCpp%E6%96%87%E4%BB%B6"><span class="toc-number">6.</span> <span class="toc-text">VSCode执行Cpp文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E6%96%87%E4%BB%B6%E7%BC%96%E8%AF%91"><span class="toc-number">6.1.</span> <span class="toc-text">多文件编译</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CMake"><span class="toc-number">7.</span> <span class="toc-text">CMake</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E6%8C%87%E4%BB%A4%E5%92%8C%E5%B8%B8%E7%94%A8%E5%8F%98%E9%87%8F"><span class="toc-number">7.1.</span> <span class="toc-text">重要指令和常用变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CMake%E7%BC%96%E8%AF%91%E5%B7%A5%E7%A8%8B"><span class="toc-number">7.2.</span> <span class="toc-text">CMake编译工程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E7%BC%96%E8%AF%91%E8%A7%84%E5%88%99"><span class="toc-number">7.3.</span> <span class="toc-text">设置编译规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E6%B5%81%E7%A8%8B"><span class="toc-number">7.4.</span> <span class="toc-text">编译流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%96%E9%83%A8%E6%9E%84%E5%BB%BA"><span class="toc-number">7.5.</span> <span class="toc-text">外部构建</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E8%B7%B5%E6%A1%88%E4%BE%8B"><span class="toc-number">8.</span> <span class="toc-text">实践案例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-helloworld"><span class="toc-number">8.1.</span> <span class="toc-text">1 helloworld</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-swap"><span class="toc-number">8.2.</span> <span class="toc-text">2 swap</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E5%AE%9E%E6%88%98C"><span class="toc-number">9.</span> <span class="toc-text">完整实战C++</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E6%BA%90%E6%96%87%E4%BB%B6"><span class="toc-number">9.1.</span> <span class="toc-text">编写源文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E8%AF%91CMake%E9%A1%B9%E7%9B%AE"><span class="toc-number">9.2.</span> <span class="toc-text">编译CMake项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEjson%E5%B9%B6%E8%B0%83%E8%AF%95%E9%A1%B9%E7%9B%AE"><span class="toc-number">9.3.</span> <span class="toc-text">配置json并调试项目</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/26/Diary/test/" title="hello world">hello world</a><time datetime="2024-06-26T01:51:20.949Z" title="发表于 2024-06-26 09:51:20">2024-06-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/24/Network/Kubernetes(k8s)/" title="Kubernetes学习">Kubernetes学习</a><time datetime="2024-06-24T15:29:37.497Z" title="发表于 2024-06-24 23:29:37">2024-06-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/24/Network/docker/" title="docker容器和传统虚拟机的区别">docker容器和传统虚拟机的区别</a><time datetime="2024-06-24T11:16:43.532Z" title="发表于 2024-06-24 19:16:43">2024-06-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/20/Cpp/Socket/" title="并发网络通信-套接字通信(C/C++ 多线程)">并发网络通信-套接字通信(C/C++ 多线程)</a><time datetime="2024-06-20T08:45:12.838Z" title="发表于 2024-06-20 16:45:12">2024-06-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/10/Linux/centos/%E8%BF%90%E7%BB%B4%E5%9F%BA%E7%A1%80/" title="CentOS7学习运维">CentOS7学习运维</a><time datetime="2024-06-10T07:42:20.882Z" title="发表于 2024-06-10 15:42:20">2024-06-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Shenao Lu</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-heart.min.js" async="async" mobile="false"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
